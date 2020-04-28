@@ -2,8 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
-const LocalStrategy = require('passport-local');
+const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
+
+const authApi = require('./routes/auth-api');
+const heroesApi = require('./routes/heroes-api');
+const collectionApi = require('./routes/collection-api');
+const Users = require('./db/user-repo');
 
 const WsHandler = require('./ws-handler');
 
@@ -14,7 +19,7 @@ app.use(bodyParser.json());
 WsHandler.init(app);
 
 app.use(session({
-    secret: 'Top secret string to encrypt session cookies',
+    secret: 'This string helps me encrypt session cookies',
     resave: false,
     saveUninitialized: false
 }));
@@ -40,11 +45,11 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function (user, done) {
-    done(null, user.id);
+    done(null, user.userId);
 });
 
-passport.deserializeUser(function (id, done) {
-    const user = Users.getUser(id);
+passport.deserializeUser(function (userId, done) {
+    const user = Users.getUser(userId);
 
     if(user) {
         done(null, user);
@@ -57,7 +62,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // -- ROUTES -- This is where API's are set up
-
+app.use('/api', authApi)
+app.use('/api', heroesApi);
+app.use('/api', collectionApi);
 
 //Handles 404.
 app.use((req, res, next) => {

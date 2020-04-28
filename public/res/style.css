@@ -21,6 +21,12 @@ input{
     color: red !important;
 }
 
+.psa {
+    color: #3333dd !important;
+    text-align: center;
+    font-size: .8rem;
+}
+
 /* -- Header Bar Styles -- */
 .header-container{
     width: 100%;

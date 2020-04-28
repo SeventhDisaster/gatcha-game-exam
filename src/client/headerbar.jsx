@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link , withRouter } from "react-router-dom";
 
-export class HeaderBar extends React.Component{
+class HeaderBar extends React.Component {
     constructor(props){
         super(props);
     }
@@ -11,7 +11,7 @@ export class HeaderBar extends React.Component{
             <React.Fragment>
                 <div className="header-user">
                     <p>Welcome to the site {userId}!</p>
-                    <button className="header-button logout" to="/signup"  tabIndex="0">
+                    <button className="header-button logout" onClick={this.doLogout}>
                         Logout
                     </button>
                 </div>
@@ -31,7 +31,27 @@ export class HeaderBar extends React.Component{
         )
     }
 
+    doLogout = async () => {
+        const url = "/api/logout";
+
+        let response;
+
+        try {
+            response = await fetch(url, {method: "POST"});
+        } catch (e) {
+            throw "Failed to connect to server: " + e;
+        }
+
+        if(response.status !== 204) {
+            throw "Error when connecting to server - Status Code: " + response.status;
+        }
+
+        this.props.setCurrentUser(null);
+        this.props.history.push("/");
+    }
+
     render() {
+
         const userId = this.props.userId;
         let content;
 
@@ -43,10 +63,12 @@ export class HeaderBar extends React.Component{
 
         return (
             <div className="header-container">
-                <Link to="/" className="header-title"> Title</Link>
+                <Link to="/" className="header-title">Hiiro</Link>
 
                 {content}
             </div>
         )
     }
 }
+
+export default withRouter(HeaderBar);

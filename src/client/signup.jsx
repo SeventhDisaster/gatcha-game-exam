@@ -44,17 +44,54 @@ export class SignUp extends React.Component{
             return;
         }
 
-        if(password !== confirmPassword) {
+        if(confirmPassword !== password) {
             this.setState({errorMessage: "The passwords do not match"});
             return;
         }
 
-        //TODO: Check if user already exists
+        const url ="/api/signup";
 
-        //TODO: Sign up
+        const payload = {userId: userId, password: password}
+
+        let response;
+
+        try {
+            response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+        } catch (e) {
+            this.setState({errorMessage: "Failed to connect to server:" + e});
+            return;
+        }
+
+        if(response.status === 400) {
+            this.setState({errorMessage: "Username is already taken"})
+        }
+
+        if(response.status !== 201) {
+            this.setState({errorMessage:
+                    "Error when connecting to server - Status code: " + response.status
+            });
+            return;
+        }
+
+        this.setState({errorMessage: null});
+
+        await this.props.fetchAndUpdateUserInfo();
+        this.props.history.push("/"); //Return to front page
     }
 
     render() {
+        let content;
+
+        if(this.state.errorMessage){
+            content = <p className="err">{this.state.errorMessage}</p>
+        }
+
         return (
             <div className="auth-container">
                 <h3>Sign up</h3>
@@ -67,7 +104,10 @@ export class SignUp extends React.Component{
                         <li>At least 1 digit (0-9)</li>
                     </ul>
                 </div>
-                <p className="err">{this.state.errorMessage}</p>
+                {content}
+                <p className="psa">PSA: This application currently only stores user information in memory and is intended for running locally only. <br/>
+                    Should it be deployed on a real server, please do not use any passwords/usernames you would use elsewhere, as encryption is not implemented.</p>
+
                 <div className="auth-form">
                     <p>Username: *</p>
                     <input type="text"

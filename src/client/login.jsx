@@ -23,9 +23,38 @@ export class Login extends React.Component{
     doLogin = async () => {
         const {userId, password} = this.state
 
-        //TODO: Check if password is correct
+        const url = "/api/login";
 
-        //TODO: Do login
+        const payload = {userId: userId, password: password}
+
+        let response;
+
+        try{
+            response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+        } catch (e) {
+            this.setState({errorMessage: "Failed to connect to server: " + e});
+            return;
+        }
+
+        if(response.status === 401) {
+            this.setState({errorMessage: "Invalid username / password"});
+            return;
+        }
+
+        if(response.status !== 204) {
+            this.setState({errorMessage: "An error occured - Status Code: " + response.status})
+            return;
+        }
+
+        this.setState({errorMessage: null});
+        await this.props.fetchAndUpdateUserInfo();
+        this.props.history.push("/")
     }
 
     render() {
