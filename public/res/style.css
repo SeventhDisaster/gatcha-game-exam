@@ -1,0 +1,170 @@
+/* General Styles */
+
+* {
+    font-family: sans-serif;
+}
+
+body {
+    background-color: #fefefe;
+    margin: 0;
+}
+
+input{
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    box-shadow: #aaa 2px 2px 7px;
+    margin: .4em;
+}
+
+.err {
+    color: red !important;
+}
+
+/* -- Header Bar Styles -- */
+.header-container{
+    width: 100%;
+    height: 4em;
+    background-color: #fcfcfc;
+    display: grid;
+    grid-template-columns: 70% 30%;
+    box-shadow: #666 -6px 0px 10px;
+}
+
+.header-title {
+    font-family: 'Courier New', Courier, monospace !important;
+    padding-top: 0.2em;
+    padding-left: 10px;
+    font-size: 2.5rem;
+    width: fit-content;
+    text-decoration: none;
+    color: #343434;
+    opacity: 0.7;
+    transition: .05s ease;
+}
+
+.header-title:hover {
+    cursor: pointer;
+    opacity: 1;
+    padding-left: 20px;
+}
+
+.header-user {
+    height: 100%;
+    padding-right: 20px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    grid-column: 2;
+}
+
+.header-user * {
+    margin: 0px 10px;
+}
+
+.header-user p {
+    font-size: 1.2rem;
+    font-family: monospace !important;
+    color: #666;
+}
+
+.header-button {
+    border: none;
+    text-decoration: none;
+    color: #343434;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #dedede;
+    transition: 0.02s ease;
+}
+
+.header-button:hover {
+    cursor: pointer;
+    color: #232399;
+    background-color: #aaaaff;
+    transform: scale(1.1);
+}
+
+.logout:hover {
+    color: #992323 !important;
+    background-color: #ffaaaa !important;
+}
+
+/* -- NOT FOUND Styles -- */
+.notfound-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.notfound-h {
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #343434
+}
+
+.notfound-p {
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #565656
+}
+.notfound-text {
+    font-family: monospace !important;
+    font-size: 1.1rem;
+    color: #565656
+}
+
+.notfound-link {
+    border: none;
+    text-decoration: none;
+    color: #343434;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #dedede;
+    transition: 0.02s ease;
+}
+
+.notfound-link:hover {
+    cursor: pointer;
+    color: #232399;
+    background-color: #aaaaff !important;
+    transform: scale(1.1);
+}
+
+/* -- AUTHENTICATION SITES STYLES --  */
+/* - Both login and signup pages utilize these styles - */
+
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-requirement {
+    padding: 0.7em 3em;
+    background-color: #cdcdcd;
+    border-radius: 10px;
+}
+
+.auth-requirement h4{
+    text-align: center;
+}
+
+.auth-form {
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 2em 0;
+}
+
+.auth.form input{
+    padding: 10px 20px;
+    margin: .4em;
+}
