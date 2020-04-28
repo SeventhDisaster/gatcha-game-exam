@@ -54,6 +54,22 @@ function consumeLootBox(userId) {
     }
 }
 
+function boughtLootBox(userId) {
+    const user = getUser(userId);
+
+    if(!user){
+        throw("Invalid user ID: " + userId)
+    }
+
+    if(user.timeFragments < 100) {
+        return false
+    }
+
+    user.lootboxes++;
+    user.timeFragments -= 100;
+    return true;
+}
+
 //Because heroes are spliced out when milled, indexes in collections property must be updated so as to not cause errors in frontend
 function updateHeroIndexes(userId) {
     const user = getUser(userId);
@@ -75,6 +91,9 @@ function rewardHeroes(userId, heroes) {
 function didMillHero(userId, heroIndex){
     const user = getUser(userId)
 
+    console.log(user);
+    console.log(heroIndex);
+
     if(!user){
         throw("Invalid user ID: " + userId)
     }
@@ -86,13 +105,18 @@ function didMillHero(userId, heroIndex){
 
     let heroValue;
     switch (milledHero.rarity) {
-        case 1: heroValue = 100; return;
-        case 2: heroValue = 200; return;
-        case 3: heroValue = 300; return;
-        default: heroValue = 0; //This should not happen
+        case 1: heroValue = 100; break;
+        case 2: heroValue = 200; break;
+        case 3: heroValue = 300; break;
+        default: break; //This should not happen
     }
 
-    user.timeFragments += heroValue;
+    user.collection.splice(heroIndex, 1); //Cuts the hero out of the list
+    user.timeFragments += heroValue; //Receive payment for sold unit
+
+    updateHeroIndexes(userId); //Update after splice
+
+    return true;
 }
 
-module.exports = {getUser, verifyUser, createUser, resetAllUsers, consumeLootBox, rewardHeroes, didMillHero}
+module.exports = {getUser, verifyUser, createUser, resetAllUsers, consumeLootBox, boughtLootBox, rewardHeroes, didMillHero}

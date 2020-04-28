@@ -9,14 +9,15 @@ export class Home extends React.Component{
 
     //TODO: Implement WS counter for lootboxes
     getUserSection = (user) => {
+        console.log(user);
         return (
             <React.Fragment>
                 <div>
                     <h3>Welcome to Hiiro {user.userId}</h3>
-                    <p>You currently have x lootboxes to open!</p>
+                    <p>You currently have {user.lootboxes} lootboxes to open!</p>
                 </div>
                 <div>
-                    <Link className="header-button openLoot-btn" to={"/lootbox"}>Lootboxes</Link>
+                    <Link className="header-button openloot-btn" to={"/lootbox"}>Lootboxes</Link>
                     <Link className="header-button collection-btn" to="/collection">Your Collection</Link>
                 </div>
 

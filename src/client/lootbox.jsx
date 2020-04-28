@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 export class Lootbox extends React.Component{
     constructor(props){
@@ -6,24 +7,23 @@ export class Lootbox extends React.Component{
 
         this.state = {
             rewards: null,
-            lootboxes: 0,
-            timeFragments: 0,
             error: null
         }
     }
 
     componentDidMount() {
-        this.fetchUserLootboxes();
+        this.props.fetchAndUpdateUserInfo();
     }
 
-    fetchUserLootboxes = async () => {
+    doPurchaseBox = async () => {
         const url = "/api/lootboxes"
 
         let response;
 
-        try {
+        try{
             response = await fetch(url, {
-                method: "GET"})
+                method: "POST"
+            })
         } catch (e) {
             this.setState({error: "Failed to connect to server: " + error})
         }
@@ -34,16 +34,12 @@ export class Lootbox extends React.Component{
             return;
         }
 
-        if (response.status !== 200) {
-            this.setState({
-                errorMsg: "Failed connection to server. Status " + response.status
-            });
+        if (response.status === 403) {
+            this.setState({error: "Not enough time fragments to purchase!"});
             return;
         }
 
-        const payload =  JSON.parse(await response.json());
-
-        this.setState({error: null, lootboxes: payload.lootboxes});
+        this.setState({error: null})
 
         this.props.fetchAndUpdateUserInfo();
     }
@@ -79,9 +75,10 @@ export class Lootbox extends React.Component{
 
         //This payload contains the rewards for opening
         const payload = JSON.parse(await response.json());
-        await this.fetchUserLootboxes();
 
         this.setState({rewards: payload, error: null});
+
+        this.props.fetchAndUpdateUserInfo();
     }
 
     prepareNext = () => {
@@ -122,7 +119,7 @@ export class Lootbox extends React.Component{
     displayBox(){
         let boxAvailable = false;
 
-        if(this.state.lootboxes > 0) {
+        if(this.props.user.lootboxes > 0) {
             boxAvailable = true
         }
 
@@ -139,6 +136,13 @@ export class Lootbox extends React.Component{
     };
 
     render() {
+
+        //If user isn't logged in, redirect back to home
+        if(!this.props.user){
+            this.props.history.push("/");
+            return <></>;
+        }
+
         let content;
         if(this.state.rewards){
             content = this.displayRewards();
@@ -154,13 +158,14 @@ export class Lootbox extends React.Component{
         return (
             <div className="loot-container">
                 <div className="loot-header">
+                    <Link className="header-button collection-btn" to="/collection">Your Collection</Link>
                     <h1 className="loot-title">Get your heroes!</h1>
                     <p className="err">{error}</p>
-                    <p>You currently have {this.state.lootboxes} lootboxes!</p>
+                    <p>You currently have {this.props.user.lootboxes} lootboxes!</p>
 
                     <p>You can purchase more lootboxes with time fragments</p>
-                    <p>Time Fragments: {this.state.timeFragments}</p>
-                    <button>Purchase Box | TF 100,-</button>
+                    <p>Time Fragments: {this.props.user.timeFragments}</p>
+                    <button onClick={this.doPurchaseBox}>Purchase Box | TF 100,-</button>
                 </div>
                 <div className="box-reward">
                     {content}

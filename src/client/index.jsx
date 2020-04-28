@@ -23,25 +23,67 @@ class App extends React.Component {
 
     componentDidMount() {
         this.fetchAndUpdateUserInfo();
-
-        let protocol = "ws:";
-        if(window.location.protocol.toLowerCase() === "https:") {
-            protocol = "wss:";
-        }
-
-        this.socket = new WebSocket(protocol + "//" + window.location.host);
-
-        this.socket.onmessage = (event) => {
-            const dto = JSON.parse(event.data);
-        }
     }
 
     componentWillUnmount() {
-        this.socket.close();
+        if(this.socket){
+            this.socket.close();
+        }
+    }
+
+    establishWSconnection = () => {
+        if(!this.socket){
+            console.log("Called")
+
+            let protocol = "ws:";
+            if(window.location.protocol.toLowerCase() === "https:") {
+                protocol = "wss:";
+            }
+
+            this.socket = new WebSocket(protocol + "//" + window.location.host);
+
+            this.socket.onmessage = (event) => {
+                const dto = JSON.parse(event.data);
+                if(dto.freeBox) {
+                    this.distributeFreeBox();
+                }
+            }
+        }
     }
 
     setCurrentUser = (user) => {
         this.setState({user: user});
+    }
+
+    distributeFreeBox = async () => {
+        const url = "api/freebox";
+
+        let response;
+
+        try{
+            response = await fetch(url, {
+                method: "POST"
+            })
+        } catch (e) {
+            this.setState({error: "Failed to connect to server: " + e})
+        }
+
+        if(response.status === 401){
+            this.setCurrentUser(null);
+            return;
+        }
+
+        if(response.status !== 204){
+            this.setState({error: "An error has occured: " + response.status})
+            return;
+        }
+
+        this.setState({error: null, freeBox: true})
+        setTimeout(() => {
+            this.setState({
+                freeBox: false
+            })
+        }, 3000)
     }
 
     fetchAndUpdateUserInfo = async () => {
@@ -73,13 +115,24 @@ class App extends React.Component {
     }
 
     render() {
-        const userId = this.state.user ? this.state.user.userId : null;
+        const user = this.state.user ? this.state.user : null;
+
+        if(this.state.user){
+            this.establishWSconnection();
+        }
+
+        let getBox = this.state.freeBox ?
+            <div className="notification">
+                <p>You just received a free box!</p>
+            </div>
+            : null
 
         return (
             <div id="page-container">
+                {getBox}
                 <BrowserRouter>
                     <div>
-                        <HeaderBar userId={userId} setCurrentUser={this.setCurrentUser}/>
+                        <HeaderBar user={user} setCurrentUser={this.setCurrentUser}/>
                         <Switch>
                             <Route exact path="/" render={props =>
                                 <Home
@@ -105,13 +158,13 @@ class App extends React.Component {
                                     {...props}
                                     setCurrentUser={this.setCurrentUser}
                                     fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}
-                                    user={userId}/>}/>
+                                    user={user}/>}/>
 
                             <Route exact path="/lootbox" render={props =>
                                 <Lootbox {...props}
                                     setCurrentUser={this.setCurrentUser}
                                     fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}
-                                    user={userId}/>}/>
+                                    user={user}/>}/>
 
 
                             <Route component={NotFound}/>

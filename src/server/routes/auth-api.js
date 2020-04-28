@@ -42,9 +42,11 @@ router.get('/user', function (req, res) {
         return;
     }
 
-    //Return only the ID of the user
+    //Return ID and some useful user data to display
     res.status(200).json({
-        userId: req.user.userId
+        userId: req.user.userId,
+        lootboxes: req.user.lootboxes,
+        timeFragments: req.user.timeFragments
     })
 })
 

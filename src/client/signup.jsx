@@ -70,6 +70,7 @@ export class SignUp extends React.Component{
 
         if(response.status === 400) {
             this.setState({errorMessage: "Username is already taken"})
+            return;
         }
 
         if(response.status !== 201) {

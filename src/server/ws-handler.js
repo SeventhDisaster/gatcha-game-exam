@@ -6,29 +6,41 @@ function init(app) {
 
     ews = express_ws(app);
 
+    //Only allow 1 instance of the distribution to be active
+    let isActive = false;
+
     app.ws('/', function (socket, req) {
-        console.log('Established a new WS connection');
+        if(req.headers.cookie){
+            console.log('Established a new WS connection');
+            console.log("Current: " + ews.getWss().clients.size)
+/*
+            const lootBoxTimer = () => {
+                ews.getWss().clients.forEach((client) => {
+                    const data = JSON.stringify({freeBox: true});
+                    console.log(data);
+                    client.send(data);
+                })
+            }
 
-        broadCastCount();
+            let distribute;
+            if(!isActive){
+                console.log("Started distribution")
+                distribute = setInterval(lootBoxTimer, 10000)
+                isActive = true;
+            }
 
-        //close is treated specially
-        socket.on('close', () => {
-            broadCastCount();
-        });
-    });
-}
-
-// Function broadcasts amount of connected clients.
-function broadCastCount() {
-    const n = ews.getWss().clients.size; //websocket clients.size = connected users
-
-    //Iterate through all users
-    ews.getWss().clients.forEach((client) => {
-
-        //sends a data object containing the value
-        const data = JSON.stringify({userCount: n});
-
-        client.send(data);
+            socket.on('close', () => {
+                console.log("Closed WS connection")
+                console.log("Current: " + ews.getWss().clients.size)
+                if(ews.getWss().clients.size > 1){
+                    //Just close connection
+                } else {
+                    clearInterval(distribute)
+                    console.log("Stopped distribution")
+                    isActive = false;
+                }
+            })                                                      */
+        }
     });
 }
 

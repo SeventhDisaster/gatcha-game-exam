@@ -205,3 +205,27 @@ input{
     font-size: 4rem;
     color: #c3c3db;
 }
+
+/* Notification styling */
+@keyframes fadeout {
+    from{
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.notification{
+    position: fixed;
+    z-index: 999; /* Top layer */
+    width: fit-content;
+    height: fit-content;
+    right: 1em;
+    bottom: 1em;
+    padding: 1em;
+    background-color: #ffff91;
+    color: #343434;
+    font-weight: bold;
+    animation: fadeout 3s ease-in forwards;
+}

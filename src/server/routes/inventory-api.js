@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { getUser, consumeLootBox, rewardHeroes } = require("../db/user-repo");
+const { getUser, consumeLootBox, boughtLootBox, rewardHeroes , didMillHero} = require("../db/user-repo");
 const { generateRewards } = require("../db/heroes-repo")
 
 const router = express.Router();
@@ -19,19 +19,46 @@ router.post("/collection", (req, res) => {
     res.status(200).json(payload);
 })
 
-//API for getting user's current amount of lootboxes
-router.get("/lootboxes", (req, res) => {
+//API Call for when the user mills (Sells) a hero. (DELETE method chosen as this method deletes a hero from the user's collection
+router.delete("/collection", (req, res) => {
     if(!req.user){
         res.status(401).send();
         return;
     }
 
-    const lootboxes = getUser(req.user.userId).lootboxes;
-    const payload = JSON.stringify({lootboxes: lootboxes});
+    if(!didMillHero(req.user.userId, req.body.heroIndex)){
+        res.status(500).send(); //If the hero was already deleted by the server, it cannot delete it again
+    } else {
+        res.status(204).send();
+    }
 
-    res.status(200).json(payload);
 })
 
+//API Call for when a user purchases a lootbox
+router.post("/lootboxes", (req, res) => {
+    if(!req.user){
+        res.status(401).send();
+        return;
+    }
+
+    if(!boughtLootBox(req.user.userId)){
+        res.status(403).send() //Not enough time fragments to purchase
+    }
+
+    res.status(204).send(); //Bought lootbox
+})
+
+router.post("/freebox", (req, res) => {
+    if(!req.user){
+        res.status(401).send(); //User must be logged in to receive a box
+    }
+
+    getUser(req.user.userId).lootboxes++;
+
+    res.status(204).send();
+})
+
+//API call for when a loot box is consumed
 router.post("/openbox", (req, res) => {
     if(!req.user){
         res.status(401).send();

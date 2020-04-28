@@ -51,14 +51,13 @@ class HeaderBar extends React.Component {
     }
 
     render() {
-
-        const userId = this.props.userId;
+        const user = this.props.user;
         let content;
 
-        if(!userId){
+        if(!user){
             content = this.renderLoggedOut();
         } else {
-            content = this.renderLoggedIn(userId);
+            content = this.renderLoggedIn(user.userId);
         }
 
         return (
