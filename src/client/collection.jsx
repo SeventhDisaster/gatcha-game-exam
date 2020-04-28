@@ -47,6 +47,20 @@ export class Collection extends React.Component{
         this.setState({error: null, collection: payload})
     }
 
+    parseRarity = (rarityValue) => {
+        switch (rarityValue) {
+            case 1: return "R"; //Rare
+            case 2: return "SR"; //Super Rare
+            case 3: return "SSR"; //Super Super Rare
+            default: return "Error" //Should not happen
+        }
+    }
+
+    sortHeroes = (a, b) =>{
+        if(a.name > b.name) return 1;
+        if(b.name > a.name) return -1;
+    }
+
     createCollectionDiv(heroes){
         if(heroes.length < 1) {
             return (
@@ -54,12 +68,14 @@ export class Collection extends React.Component{
             )
         } else {
            return(
+
                 <div>
-                    {heroes.map(hero => (
-                        <React.Fragment key={hero.name}>
+                    {heroes.sort(this.sortHeroes).map(hero => (
+                        //Hero index is used as a key. Represents it's index in
+                        <React.Fragment key={hero.name + hero.index}>
                             <div className="hero-div">
                                 <h4 className="hero-name">{hero.name} - {this.parseRarity(hero.rarity)}</h4>
-                                <p className="series-name">{hero.series}</p>
+                                <p className="series-name">Series: {hero.series}</p>
                                 <p className="hero-desc">{hero.description}</p>
                             </div>
                         </React.Fragment>))

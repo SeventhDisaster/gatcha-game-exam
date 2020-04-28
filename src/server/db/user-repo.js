@@ -25,7 +25,7 @@ function createUser(userId, password) {
     const user = {
         userId: userId, //ID is the username
         password: password,
-        lootBoxes: 3, //Users always start with 3 lootboxes
+        lootboxes: 3, //Users always start with 3 lootboxes
         collection: [], //Users have nothing in their collection to begin with
         timeFragments: 0, //Currency
     }
@@ -37,6 +37,39 @@ function createUser(userId, password) {
 
 function resetAllUsers() {
     users.clear();
+}
+
+function consumeLootBox(userId) {
+    const user = getUser(userId);
+
+    if(!user){
+        throw("Invalid user ID: " + userId)
+    }
+
+    if(user.lootboxes < 1) {
+        return false; //User cannot open lootboxes as they have none left
+    } else {
+        user.lootboxes--;
+        return true;
+    }
+}
+
+//Because heroes are spliced out when milled, indexes in collections property must be updated so as to not cause errors in frontend
+function updateHeroIndexes(userId) {
+    const user = getUser(userId);
+    for(let i = 0; i < user.collection.length; i++){
+        user.collection[i].index = i;
+    }
+}
+
+//Function takes an array of heroes and pushes into user's collection
+function rewardHeroes(userId, heroes) {
+    const user = getUser(userId);
+    for(let hero of heroes){
+        hero.index = heroes.length;
+        user.collection.push(hero);
+    }
+    updateHeroIndexes(userId);
 }
 
 function didMillHero(userId, heroIndex){
@@ -62,4 +95,4 @@ function didMillHero(userId, heroIndex){
     user.timeFragments += heroValue;
 }
 
-module.exports = {getUser, verifyUser, createUser, resetAllUsers, didMillHero}
+module.exports = {getUser, verifyUser, createUser, resetAllUsers, consumeLootBox, rewardHeroes, didMillHero}

@@ -7,6 +7,7 @@ import HeaderBar from './headerbar';
 import {NotFound} from "./notfound";
 import {Herolist} from "./herolist";
 import {Collection} from "./collection";
+import {Lootbox} from "./lootbox";
 import {SignUp} from "./signup";
 import {Login} from "./login";
 
@@ -105,6 +106,13 @@ class App extends React.Component {
                                     setCurrentUser={this.setCurrentUser}
                                     fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}
                                     user={userId}/>}/>
+
+                            <Route exact path="/lootbox" render={props =>
+                                <Lootbox {...props}
+                                    setCurrentUser={this.setCurrentUser}
+                                    fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}
+                                    user={userId}/>}/>
+
 
                             <Route component={NotFound}/>
                         </Switch>

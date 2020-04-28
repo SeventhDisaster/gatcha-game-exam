@@ -43,7 +43,7 @@ export class Herolist extends React.Component{
         return JSON.parse(payload);
     }
 
-    parseRarity(rarityValue) {
+    parseRarity = (rarityValue) => {
         switch (rarityValue) {
             case 1: return "R"; //Rare
             case 2: return "SR"; //Super Rare
@@ -58,7 +58,7 @@ export class Herolist extends React.Component{
                 {heroes.map(hero => (
                     <React.Fragment key={hero.name}>
                         <div className="hero-div">
-                            <h4 className="hero-name">{hero.name} - {this.parseRarity(hero.rarity)}</h4>
+                            <h4 className="hero-name">{hero.name} - {super.parseRarity(hero.rarity)}</h4>
                             <p className="series-name">{hero.series}</p>
                             <p className="hero-desc">{hero.description}</p>
                         </div>

@@ -109,15 +109,17 @@ const heroes = [
 //TODO: Implement rarity algorithm
 
 function getRandomHero() {
-    return heroes[Math.floor(Math.random() * heroes.length - 1)];
+    //Here I get a deep copy of the hero objects, so as to not reuse the reference in every instance
+    //Ref: https://scotch.io/bar-talk/copying-objects-in-javascript
+    return JSON.parse(JSON.stringify(heroes[Math.floor(Math.random() * heroes.length)]));
 }
 
-function generateLootBoxes(amount) {
-    let boxes = [];
+function generateRewards(amount) {
+    let rewards = [];
     for(let i = 0; i < amount; i++){
-        boxes.push(getRandomHero())
+        rewards.push(getRandomHero())
     }
-    return boxes;
+    return rewards;
 }
 
-module.exports = {heroes, getRandomHero, generateLootBoxes};
+module.exports = {heroes, generateRewards};

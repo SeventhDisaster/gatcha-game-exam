@@ -7,7 +7,7 @@ const path = require('path');
 
 const authApi = require('./routes/auth-api');
 const heroesApi = require('./routes/heroes-api');
-const collectionApi = require('./routes/collection-api');
+const inventoryApi = require('./routes/inventory-api');
 const Users = require('./db/user-repo');
 
 const WsHandler = require('./ws-handler');
@@ -64,7 +64,7 @@ app.use(passport.session());
 // -- ROUTES -- This is where API's are set up
 app.use('/api', authApi)
 app.use('/api', heroesApi);
-app.use('/api', collectionApi);
+app.use('/api', inventoryApi);
 
 //Handles 404.
 app.use((req, res, next) => {
