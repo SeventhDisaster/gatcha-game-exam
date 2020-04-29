@@ -43,7 +43,7 @@ function consumeLootBox(userId) {
     const user = getUser(userId);
 
     if(!user){
-        throw("Invalid user ID: " + userId)
+        return false; //User does not exist for some reason
     }
 
     if(user.lootboxes < 1) {
@@ -54,19 +54,23 @@ function consumeLootBox(userId) {
     }
 }
 
-function boughtLootBox(userId) {
+function boughtLootBox(userId, free) {
     const user = getUser(userId);
 
     if(!user){
-        throw("Invalid user ID: " + userId)
+        return false; //User does not exist for some reason
     }
 
-    if(user.timeFragments < 100) {
-        return false
+    if(!free){
+        if(user.timeFragments < 100) {
+            return false;
+        }
+        user.lootboxes++;
+        user.timeFragments -= 100;
+    } else {
+        user.lootboxes++;
     }
 
-    user.lootboxes++;
-    user.timeFragments -= 100;
     return true;
 }
 

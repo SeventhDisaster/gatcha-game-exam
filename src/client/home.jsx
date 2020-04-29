@@ -9,7 +9,6 @@ export class Home extends React.Component{
 
     //TODO: Implement WS counter for lootboxes
     getUserSection = (user) => {
-        console.log(user);
         return (
             <React.Fragment>
                 <div>

@@ -41,21 +41,11 @@ router.post("/lootboxes", (req, res) => {
         return;
     }
 
-    if(!boughtLootBox(req.user.userId)){
+    if(!boughtLootBox(req.user.userId, false)){
         res.status(403).send() //Not enough time fragments to purchase
     }
 
     res.status(204).send(); //Bought lootbox
-})
-
-router.post("/freebox", (req, res) => {
-    if(!req.user){
-        res.status(401).send(); //User must be logged in to receive a box
-    }
-
-    getUser(req.user.userId).lootboxes++;
-
-    res.status(204).send();
 })
 
 //API call for when a loot box is consumed

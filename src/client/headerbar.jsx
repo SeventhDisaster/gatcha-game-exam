@@ -46,6 +46,14 @@ class HeaderBar extends React.Component {
             throw "Error when connecting to server - Status Code: " + response.status;
         }
 
+        if(this.props.socket) {
+            if (this.props.user) {
+                this.props.socket.send(
+                    JSON.stringify({clearUserId: this.props.user.userId})
+                );
+            }
+        }
+
         this.props.setCurrentUser(null);
         this.props.history.push("/");
     }

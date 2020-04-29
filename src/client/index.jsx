@@ -23,61 +23,42 @@ class App extends React.Component {
 
     componentDidMount() {
         this.fetchAndUpdateUserInfo();
-    }
 
-    componentWillUnmount() {
-        if(this.socket){
-            this.socket.close();
+        let protocol = "ws:";
+        if(window.location.protocol.toLowerCase() === "https:") {
+            protocol = "wss:";
         }
-    }
 
-    establishWSconnection = () => {
-        if(!this.socket){
-            console.log("Called")
+        this.socket = new WebSocket(protocol + "//" + window.location.host);
 
-            let protocol = "ws:";
-            if(window.location.protocol.toLowerCase() === "https:") {
-                protocol = "wss:";
-            }
-
-            this.socket = new WebSocket(protocol + "//" + window.location.host);
-
-            this.socket.onmessage = (event) => {
-                const dto = JSON.parse(event.data);
-                if(dto.freeBox) {
-                    this.distributeFreeBox();
+        this.socket.onmessage = (event) => {
+            const dto = JSON.parse(event.data);
+            if(this.state.user){
+                if(dto.includes(this.state.user.userId)){
+                    this.notifyFreeBox();
+                    this.fetchAndUpdateUserInfo();
                 }
             }
         }
     }
 
-    setCurrentUser = (user) => {
-        this.setState({user: user});
+    componentWillUnmount() {
+        if(this.socket){
+            if(this.state.user){
+                this.socket.send(JSON.stringify({clearUserId: this.state.user.userId}));
+            }
+            this.socket.close();
+        }
     }
 
-    distributeFreeBox = async () => {
-        const url = "api/freebox";
-
-        let response;
-
-        try{
-            response = await fetch(url, {
-                method: "POST"
-            })
-        } catch (e) {
-            this.setState({error: "Failed to connect to server: " + e})
+    setCurrentUser = (user) => {
+        this.setState({user: user});
+        if(user){
+            this.socket.send(JSON.stringify({userId: this.state.user.userId}));
         }
+    }
 
-        if(response.status === 401){
-            this.setCurrentUser(null);
-            return;
-        }
-
-        if(response.status !== 204){
-            this.setState({error: "An error has occured: " + response.status})
-            return;
-        }
-
+    notifyFreeBox = () => {
         this.setState({error: null, freeBox: true})
         setTimeout(() => {
             this.setState({
@@ -117,10 +98,6 @@ class App extends React.Component {
     render() {
         const user = this.state.user ? this.state.user : null;
 
-        if(this.state.user){
-            this.establishWSconnection();
-        }
-
         let getBox = this.state.freeBox ?
             <div className="notification">
                 <p>You just received a free box!</p>
@@ -132,7 +109,7 @@ class App extends React.Component {
                 {getBox}
                 <BrowserRouter>
                     <div>
-                        <HeaderBar user={user} setCurrentUser={this.setCurrentUser}/>
+                        <HeaderBar user={user} socket={this.socket} setCurrentUser={this.setCurrentUser}/>
                         <Switch>
                             <Route exact path="/" render={props =>
                                 <Home
