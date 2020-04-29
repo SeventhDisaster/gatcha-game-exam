@@ -74,6 +74,25 @@ test("Do create user and get data", async () => {
     expect(response.body.password).toBeUndefined(); //Make sure the password is not sent back
 })
 
+test("Do create user and delete user", async () => {
+    const userId = "Foo-" + (counter++);
+
+    //Uses same cookie jar for the HTTP request
+    const agent = request.agent(app)
+
+    let response = await agent
+        .post('/api/signup')
+        .send({userId, password: "bar"})
+        .set('Content-Type', 'application/json');
+
+    expect(response.statusCode).toBe(201);
+
+    let delResponse = await agent
+        .delete("/api/user");
+
+    expect(delResponse.statusCode).toBe(204)
+})
+
 test("Test create user, login in a different session to get data", async () => {
     const userId = "Foo-" + (counter++);
 

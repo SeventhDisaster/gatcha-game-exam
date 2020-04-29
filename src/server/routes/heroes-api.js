@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 //This endpoint is open to everyone.
-//No authentication requirements
+//No authentication requirements/
 router.get("/heroes", (req, res) => {
     const payload = JSON.stringify(heroes)
 

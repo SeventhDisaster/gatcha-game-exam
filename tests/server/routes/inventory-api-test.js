@@ -3,24 +3,6 @@ const app = require('../../../src/server/app');
 
 let counter = 0;
 
-test("Do call APIs without authentication", async () => {
-    const getCollection = await request(app)
-        .post("/api/collection")
-    expect(getCollection.statusCode).toBe(401)
-
-    const millHero = await request(app)
-        .delete("/api/collection")
-    expect(millHero.statusCode).toBe(401)
-
-    const purchaseBox = await request(app)
-        .post("/api/lootboxes")
-    expect(purchaseBox.statusCode).toBe(401)
-
-    const openBox = await request(app)
-        .post("/api/collection")
-    expect(openBox.statusCode).toBe(401)
-})
-
 test("Do receive user collection", async () => {
     const user = request.agent(app);
 

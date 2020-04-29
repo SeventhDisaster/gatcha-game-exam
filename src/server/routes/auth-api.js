@@ -50,4 +50,19 @@ router.get('/user', function (req, res) {
     })
 })
 
+router.delete("/user", function (req, res) {
+    if(!req.user) {
+        res.status(403).send(); //Not allowed to delete user if its not yourself
+        return;
+    }
+
+    const deleted = Users.removeUser(req.user.userId);
+
+    if (!deleted){
+        res.status(500).send() //Failed to delete user
+    }
+
+    res.status(204).send();
+})
+
 module.exports = router;

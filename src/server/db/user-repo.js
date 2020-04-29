@@ -50,7 +50,6 @@ function verifyUser(id, password) {
     return user.password === password;
 }
 
-
 function createUser(userId, password) {
     if(getUser(userId)){
         return false; //User with the same ID already exists
@@ -67,6 +66,15 @@ function createUser(userId, password) {
     users.set(userId, user);
 
     return true; //User successfully created.
+}
+
+
+function removeUser(userId) {
+    if(getUser(userId)){
+        users.delete(userId);
+        return true;
+    }
+    return false;
 }
 
 function resetAllUsers() {
@@ -160,4 +168,4 @@ function didMillHero(userId, heroIndex){
     return true;
 }
 
-module.exports = {getUser, verifyUser, createUser, resetAllUsers, consumeLootBox, boughtLootBox, rewardHeroes, didMillHero}
+module.exports = {getUser, verifyUser, createUser, removeUser, resetAllUsers, consumeLootBox, boughtLootBox, rewardHeroes, didMillHero}

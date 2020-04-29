@@ -11,7 +11,7 @@
 const app  = require('../../src/server/app');
 const WS = require("ws");
 
-const {checkConnectedWS} = require('../shared/test-utils-ws');
+const {checkConnectedWS} = require('../test-utils-ws');
 
 let server;
 let port;
