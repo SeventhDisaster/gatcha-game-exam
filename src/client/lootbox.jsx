@@ -30,7 +30,9 @@ export class Lootbox extends React.Component{
 
         if (response.status === 401) {
             this.props.setCurrentUser(null);
-            this.props.history.push("/");
+            if(this.props.history){
+                this.props.history.push("/");
+            }
             return;
         }
 
@@ -57,7 +59,7 @@ export class Lootbox extends React.Component{
         }
 
         switch (response.status) {
-            case 400:
+            case 403:
                 this.setState({error: "You have no boxes left to open"})
                 return;
             case 401:
@@ -85,6 +87,16 @@ export class Lootbox extends React.Component{
         this.setState({rewards: null})
     }
 
+    colorRarity = (rarity) => {
+        if(rarity === 3) {
+            return "ssr reward"
+        } else if (rarity === 2){
+            return "sr reward"
+        } else {
+            return "r reward"
+        }
+    }
+
     displayRewards(){
         const first = this.state.rewards[0];
         const second = this.state.rewards[1];
@@ -94,33 +106,38 @@ export class Lootbox extends React.Component{
             <div>
                 <React.Fragment>
                     <div className="reward-display">
-                        <div className="reward">
+                        <div className={this.colorRarity(first.rarity)}>
                             <h4>{first.name}</h4>
                             <p>{first.series}</p>
                             <p>{first.description}</p>
                         </div>
-                        <div className="reward">
+                        <div className={this.colorRarity(second.rarity)}>
                             <h4>{second.name}</h4>
                             <p>{second.series}</p>
                             <p>{second.description}</p>
                         </div>
-                        <div className="reward">
+                        <div className={this.colorRarity(third.rarity)}>
                             <h4>{third.name}</h4>
                             <p>{third.series}</p>
                             <p>{third.description}</p>
                         </div>
                     </div>
-                    <button onClick={this.prepareNext}>Open another</button>
+                    <div className="center">
+                        <button className="another-box" onClick={this.prepareNext}>Open another</button>
+                    </div>
                 </React.Fragment>
             </div>
         )
     };
 
+
+
     displayBox(){
         let boxAvailable = false;
-
-        if(this.props.user.lootboxes > 0) {
-            boxAvailable = true
+        if(this.props.user) {
+            if(this.props.user.lootboxes > 0) {
+                boxAvailable = true
+            }
         }
 
 
@@ -136,11 +153,13 @@ export class Lootbox extends React.Component{
     };
 
     render() {
-
-        //If user isn't logged in, redirect back to home
-        if(!this.props.user){
+        let timeFragments = 0;
+        let lootboxes = 0;
+        if(this.props.user){
+            timeFragments = this.props.user.timeFragments;
+            lootboxes = this.props.user.lootboxes;
+        } else {
             this.props.history.push("/");
-            return <></>;
         }
 
         let content;
@@ -150,7 +169,7 @@ export class Lootbox extends React.Component{
             content = this.displayBox();
         }
 
-        let error = "";
+        let error = " ";
         if(this.state.error){
             error = this.state.error
         }
@@ -158,14 +177,14 @@ export class Lootbox extends React.Component{
         return (
             <div className="loot-container">
                 <div className="loot-header">
-                    <Link className="header-button collection-btn" to="/collection">Your Collection</Link>
+                    <Link className="header-button" to="/collection">Your Collection</Link>
                     <h1 className="loot-title">Get your heroes!</h1>
-                    <p className="err">{error}</p>
-                    <p>You currently have {this.props.user.lootboxes} lootboxes!</p>
+                    <p className="user-section-lootboxes">You currently have {lootboxes} lootboxes!</p>
 
-                    <p>You can purchase more lootboxes with time fragments</p>
-                    <p>Time Fragments: {this.props.user.timeFragments}</p>
-                    <button onClick={this.doPurchaseBox}>Purchase Box | TF 100,-</button>
+                    <p>You can purchase more lootboxes with time fragments - 100 Time Fragments per box</p>
+                    <p className="err">{error}</p>
+                    <p className="time-fragments">Time Fragments: {timeFragments}♦</p>
+                    <button className="purchase-box" onClick={this.doPurchaseBox}>Purchase Box | TF 100♦</button>
                 </div>
                 <div className="box-reward">
                     {content}

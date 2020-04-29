@@ -7,14 +7,54 @@ export class Collection extends React.Component{
 
         this.state = {
             collection: [],
+            missing: [],
             error: null
         }
     }
 
     componentDidMount() {
         this.fetchUserCollection();
+        this.displayMissing();
         this.props.fetchAndUpdateUserInfo();
     }
+
+    displayMissing = async () => {
+        const url = "/api/heroes";
+        let response;
+        let payload;
+        try{
+            response = await fetch(url, {method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }})
+            payload = await response.json();
+        } catch (e) {
+            console.log(e);
+            return;
+        }
+        if(response.status !== 200) {return null;}
+        const result = JSON.parse(payload)
+
+        let allHeroes = [];
+
+        for(let hero of result){
+            allHeroes.push(hero.name);
+        }
+
+        const filterMissing = (hero) => {
+            for(let collected of this.state.collection){
+                if(hero === collected.name){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+
+        const missing = allHeroes.filter(filterMissing);
+        this.setState({missing: missing})
+    }
+
 
     fetchUserCollection = async () => {
         const url = "/api/collection"
@@ -52,6 +92,16 @@ export class Collection extends React.Component{
             case 2: return "SR"; //Super Rare
             case 3: return "SSR"; //Super Super Rare
             default: return "Error" //Should not happen
+        }
+    }
+
+    colorRarity = (rarity) => {
+        if(rarity === 3) {
+            return "ssr reward"
+        } else if (rarity === 2){
+            return "sr reward"
+        } else {
+            return "r reward"
         }
     }
 
@@ -98,34 +148,45 @@ export class Collection extends React.Component{
 
         this.setState({error: null});
 
-        this.fetchUserCollection()
+        this.fetchUserCollection();
+        this.displayMissing();
         this.props.fetchAndUpdateUserInfo();
     }
 
     //Sell button
-    millDiv = (index) => {
+    millDiv = (index, rarity) => {
+        let value;
+
+        switch (rarity) {
+            case 1: value = 100; break;
+            case 2: value = 200; break;
+            case 3: value = 300; break;
+        }
         return (
-            <button onClick={() => this.doMillHero(index)}>Sell</button>
+            <button className="mill-btn" onClick={() => this.doMillHero(index)}>Sell - {value}♦</button>
         )
     }
 
     createCollectionDiv(heroes){
         if(heroes.length < 1) {
             return (
-                <p>Seems like your collection is empty!</p>
+                <div>
+                    <p className="empty-coll">Seems like your collection is empty!</p>
+                    <p className="empty-coll">Go to the lootbox to start collecting!</p>
+                </div>
             )
         } else {
            return(
 
-                <div>
+                <div className="collection-display">
                     {heroes.sort(this.sortHeroes).map(hero => (
                         //Hero index is used as a key. Represents it's index in
                         <React.Fragment key={hero.index}>
-                            <div className="hero-div">
+                            <div className={this.colorRarity(hero.rarity)}>
                                 <h4 className="hero-name">{hero.name} - {this.parseRarity(hero.rarity)}</h4>
                                 <p className="series-name">Series: {hero.series}</p>
                                 <p className="hero-desc">{hero.description}</p>
-                                {this.millDiv(hero.index)}
+                                {this.millDiv(hero.index, hero.rarity)}
                             </div>
                         </React.Fragment>))
                     }
@@ -135,10 +196,9 @@ export class Collection extends React.Component{
     }
 
     render() {
-        //If user isn't logged in, redirect back to home
-        if(!this.props.user){
-            this.props.history.push("/");
-            return <></>;
+        let timeFragments;
+        if(this.props.user){
+            timeFragments = this.props.user.timeFragments;
         }
 
         let userCollection;
@@ -147,13 +207,23 @@ export class Collection extends React.Component{
             userCollection = this.createCollectionDiv(this.state.collection);
         }
 
+        let missing;
+
+        if(this.state.missing.length > 0){
+            missing = this.state.missing.join(", ")
+        } else {
+            missing = "None! You got them all!"
+        }
+
         return (
-            <div className="collection-container">
-                <div className="collection-header">
-                    <p>Time Fragments: {this.props.user.timeFragments}</p>
-                    <Link className={"header-button openloot-btn"} to={"/lootbox"}>Lootboxes</Link>
-                    <h1 className="collection-title">Your Collection:</h1>
+            <div className="loot-container">
+                <div className="loot-header">
+                    <p className="time-fragments">Time Fragments: {timeFragments}♦</p>
+                    <Link className={"header-button"} to={"/lootbox"}>Lootboxes</Link>
+                    <h1 className="loot-title">Your Collection:</h1>
                     {userCollection}
+                    <h3>You are missing the following heroes:</h3>
+                    <p>{missing}</p>
                 </div>
             </div>
         )

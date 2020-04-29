@@ -2,6 +2,7 @@
 
 * {
     font-family: sans-serif;
+    cursor: default;
 }
 
 body {
@@ -19,6 +20,7 @@ input{
 
 .err {
     color: red !important;
+    height: .9rem;
 }
 
 .psa {
@@ -50,7 +52,7 @@ input{
 }
 
 .header-title:hover {
-    cursor: pointer;
+    cursor: pointer !important;
     opacity: 1;
     padding-left: 20px;
 }
@@ -86,7 +88,7 @@ input{
 }
 
 .header-button:hover {
-    cursor: pointer;
+    cursor: pointer !important;
     color: #232399;
     background-color: #aaaaff;
     transform: scale(1.1);
@@ -135,7 +137,7 @@ input{
 }
 
 .notfound-link:hover {
-    cursor: pointer;
+    cursor: pointer !important;
     color: #232399;
     background-color: #aaaaff !important;
     transform: scale(1.1);
@@ -204,6 +206,224 @@ input{
     text-align: center;
     font-size: 4rem;
     color: #c3c3db;
+}
+
+.user-section-header {
+    width: 100%;
+    background-color: #dcd5ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.user-section-welcome {
+    line-height: 2rem;
+    padding: 0;
+    font-size: 3rem;
+    color: #343434;
+    margin-bottom: 1em;
+}
+
+.user-section-lootboxes {
+    font-size: 1.4rem;
+    color: #997a1b;
+    font-weight: bold;
+}
+
+.user-section-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 2em 0;
+}
+
+.openloot-btn{
+    font-size: 2.4em;
+    padding: 1em;
+}
+
+.openloot-btn:hover{
+    background-color: #cdba80 !important;
+    color: #332b0f;
+}
+
+.collection-btn{
+    font-size: 2.4em;
+    padding: 1em;
+}
+
+.collection-btn:hover{
+    background-color: #bca2e2 !important;
+    color: #191334;
+}
+
+/* Lootbox Styling */
+
+.loot-container{
+    width: 100%;
+    padding: 2em 0;
+}
+
+.loot-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loot-header p{
+    margin-top: 0;
+}
+
+.loot-title{
+    line-height: 1em;
+    color: #343434;
+    margin-bottom: 0;
+}
+
+.time-fragments {
+    font-size: 1.4rem;
+    color: #157bad;
+    font-weight: bold;
+}
+
+.purchase-box {
+    border: none;
+    text-decoration: none;
+    color: #343434;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #b6e1fa;
+    transition: 0.02s ease;
+}
+
+.purchase-box:hover {
+    cursor: pointer !important;
+    color: #232399;
+    background-color: #aaaaff;
+    transform: scale(1.1);
+}
+
+.box-reward {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.box{
+    margin: 2em;
+    padding: 2em 4em;
+    border: none;
+    transition: .1s ease;
+    font-size: 2rem;
+    font-weight: bold;
+    background-color: #cdba80 !important;
+    color: #332b0f;
+}
+
+.box:hover {
+    cursor: pointer !important;
+    transform: scale(1.1);
+}
+
+.reward-display{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.reward{
+    box-shadow: #ccc 0 0 10px;
+    width: 25%;
+    padding: 1.5em;
+    margin: 4em auto;
+}
+
+.r{
+    background-color: #a4c3ff !important;
+}
+
+.sr{
+    background-color: #cda5f1 !important;
+    box-shadow: #e46fff 0 0 20px;
+}
+
+@keyframes bob {
+    0%{
+        transform: translateY(5px);
+    }
+    50%{
+        transform: translateY(-5px);
+    }
+    100%{
+        transform: translateY(5px);
+    }
+}
+
+.ssr{
+    animation: bob infinite ease-in-out 2s;
+    background-color: #ffde87 !important;
+    box-shadow: #ffe659 0 0 20px;
+}
+
+.ssr-text{
+    background-color: #ffde87 !important;
+    box-shadow: #ffe659 0 0 20px;
+}
+
+.ra-text {
+    padding: 5px 10px;
+}
+
+.another-box {
+    margin: 1em auto;
+    width: fit-content;
+    padding: 1em 4em;
+    border: none;
+    transition: .1s ease;
+    font-size: 1.3rem;
+    font-weight: bold;
+    background-color: #cdba80 !important;
+    color: #332b0f;
+}
+
+.another-box:hover {
+    cursor: pointer !important;
+    transform: scale(1.1);
+}
+
+.center {
+    display: flex;
+    align-items: center;
+}
+
+/* Collection and list styles */
+.collection-display {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.empty-coll {
+    margin: 4em auto;
+    padding: 3em;
+}
+
+.mill-btn {
+    border-style: none;
+    padding: 1em 2em;
+    background-color: #9eecff;
+    color: #097193;
+    font-weight: bold;
+    transition: .1s ease;
+}
+
+.mill-btn:hover {
+    cursor: pointer !important;
+    transform: scale(1.2);
 }
 
 /* Notification styling */

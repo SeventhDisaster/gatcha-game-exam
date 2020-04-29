@@ -1,3 +1,9 @@
+/*
+* I DID NOT WRITE THIS FILE.
+* This file was written as part of the repository for our class:
+* https://github.com/arcuri82/web_development_and_api_design/blob/master/shared/mytest-utils.js
+*/
+
 // Origin: shared/mytest-utils.js
 
 const request = require('supertest');
@@ -6,11 +12,11 @@ const request = require('supertest');
 /*
     Here, we stub away the calls to "fetch", as not available in NodeJS (ie, they
     are specific to the browser, like alert()).
+
     A complication here is that fetch() returns a Promise. Once such Promise is resolved,
     accessing response.json() is itself a function returning another Promise.
     Here, we resolve these Promises immediately.
  */
-
 export function stubFetch(
     // http status to return, eg 200
     status,
@@ -127,6 +133,8 @@ export function recursiveTimeoutCheck(predicate, totalTimeMS, intervalMS, start,
 export function flushPromises() {
     return new Promise(resolve => setImmediate(resolve));
 }
+
+
 
 
 

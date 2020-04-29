@@ -27,7 +27,7 @@ router.delete("/collection", (req, res) => {
     }
 
     if(!didMillHero(req.user.userId, req.body.heroIndex)){
-        res.status(500).send(); //If the hero was already deleted by the server, it cannot delete it again
+        res.status(409).send(); //If the hero was already deleted by the server, it cannot delete it again
     } else {
         res.status(204).send();
     }
@@ -43,6 +43,7 @@ router.post("/lootboxes", (req, res) => {
 
     if(!boughtLootBox(req.user.userId, false)){
         res.status(403).send() //Not enough time fragments to purchase
+        return;
     }
 
     res.status(204).send(); //Bought lootbox
@@ -56,7 +57,7 @@ router.post("/openbox", (req, res) => {
     }
     const user = getUser(req.user.userId);
     if(!consumeLootBox(user.userId)){
-        res.status(400).send(); //User did not have enough boxes
+        res.status(403).send(); //User did not have enough boxes
     } else {
         const rewards = generateRewards(3);
         rewardHeroes(user.userId, rewards)

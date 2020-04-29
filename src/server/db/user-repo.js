@@ -1,6 +1,40 @@
 
 const users = new Map();
 
+const sampleUser =
+    {
+        userId: "Weeb",
+        password: "Anime123",
+        lootboxes: 5,
+        collection: [
+            {
+                name: "Sora",
+                series: "No Game No Life",
+                description: "Attuned to the world of a shut-in gamer, he has become so proficient at any game so as to never lose",
+                rarity: 1,
+                index: 0
+            },
+            {
+                name: "Spike",
+                series: "Cowboy Bebop",
+                description: "Being a space cowboy isn't a job for everyone, Spike makes his living taking bounties in the solar system.",
+                rarity: 3,
+                index: 1
+            },
+            {
+                name: "Kuriyama Mirai",
+                series: "Kyoukai no Kanata",
+                description: "Using her own blood to draw a blade to vanquish the youmu, the manifestations of negative human emotions.",
+                rarity: 2,
+                index: 2
+            }
+        ],
+        timeFragments: 500
+    }
+
+
+users.set(sampleUser.userId, sampleUser);
+
 // user ID = Username
 function getUser(userId) {
     return users.get(userId)
@@ -61,16 +95,18 @@ function boughtLootBox(userId, free) {
         return false; //User does not exist for some reason
     }
 
+    //Same method is used to free box every minute
     if(!free){
         if(user.timeFragments < 100) {
             return false;
         }
+
         user.lootboxes++;
-        user.timeFragments -= 100;
-    } else {
-        user.lootboxes++;
+        user.timeFragments -= 100; //The cost of each lootbox is 100
+        return true;
     }
 
+    user.lootboxes++;
     return true;
 }
 
@@ -85,6 +121,10 @@ function updateHeroIndexes(userId) {
 //Function takes an array of heroes and pushes into user's collection
 function rewardHeroes(userId, heroes) {
     const user = getUser(userId);
+    if(!user){
+        return false; // No user
+    }
+
     for(let hero of heroes){
         hero.index = heroes.length;
         user.collection.push(hero);
@@ -95,16 +135,13 @@ function rewardHeroes(userId, heroes) {
 function didMillHero(userId, heroIndex){
     const user = getUser(userId)
 
-    console.log(user);
-    console.log(heroIndex);
-
     if(!user){
-        throw("Invalid user ID: " + userId)
+        return false; // User does not exist for some reason
     }
 
     const milledHero = user.collection[heroIndex];
     if(!milledHero){
-        throw("Hero does not exist on index: " + heroIndex)
+        return false; // Hero does not exist on index
     }
 
     let heroValue;
@@ -112,7 +149,7 @@ function didMillHero(userId, heroIndex){
         case 1: heroValue = 100; break;
         case 2: heroValue = 200; break;
         case 3: heroValue = 300; break;
-        default: break; //This should not happen
+        default: return false; //This should not happen (Some hero has a wrong rarity assignment)
     }
 
     user.collection.splice(heroIndex, 1); //Cuts the hero out of the list

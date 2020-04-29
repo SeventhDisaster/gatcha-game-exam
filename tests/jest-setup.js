@@ -1,3 +1,8 @@
+/*
+* I DID NOT WRITE THIS FILE: This was copied and pasted from the class github repository.
+* https://github.com/arcuri82/web_development_and_api_design/blob/master/shared/jest-setup.js
+* */
+
 // Origin: shared/jest-setup.js
 
 const {configure } = require('enzyme');

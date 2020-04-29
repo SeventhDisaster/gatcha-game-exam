@@ -55,8 +55,6 @@ function init(app) {
         })
 
         socket.on('close', () => {
-            console.log("Closed WS connection")
-            console.log("Connected clients: " + ews.getWss().clients.size)
             if(ews.getWss().clients.size < 1){
                 clearInterval(distribute)
                 distributing = false;

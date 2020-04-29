@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { heroes } = require("../db/heroes-repo");
+const { heroes, addHero } = require("../db/heroes-repo");
 
 const router = express.Router();
 
@@ -15,13 +15,9 @@ router.get("/heroes", (req, res) => {
 
 //This PUT API is not implemented in the front-end, but exists to fill data into the heroes repository
 router.put("/heroes", (req, res) => {
-    if(!req.user){
-        res.status(401).send();
-        return;
-    }
-    const data = JSON.parse(req.body.hero)
-    heroes.push(hero)
-
+    const hero = req.body.hero
+    addHero(hero.name, hero.series, hero.description, hero.rarity);
+    res.status(201).send();
 })
 
 module.exports = router;

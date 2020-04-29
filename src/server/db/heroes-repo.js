@@ -108,10 +108,66 @@ const heroes = [
 
 //TODO: Implement rarity algorithm
 
+const filterRare = (hero) => {
+    return hero.rarity === 1;
+}
+
+const filterSRare = (hero) => {
+    return hero.rarity === 2;
+}
+
+const filterSSRare = (hero) => {
+    return hero.rarity === 3;
+}
+
 function getRandomHero() {
+    let rarity;
+
+    const roll = Math.random();
+    if(roll > 0.6){
+        if(roll > 0.9){
+            rarity = 3;
+        } else {
+            rarity = 2;
+        }
+    } else {
+        rarity = 1
+    }
+
+    let result;
+    switch (rarity) {
+        case 1:
+            const rares = heroes.filter(filterRare);
+            result = rares[Math.floor(Math.random() * rares.length)];
+            break;
+        case 2:
+            const srares = heroes.filter(filterSRare);
+            result = srares[Math.floor(Math.random() * srares.length)];
+            break;
+        case 3:
+            const ssrares = heroes.filter(filterSSRare);
+            result = ssrares[Math.floor(Math.random() * ssrares.length)];
+            break;
+        default: result = heroes;
+            break;
+    }
+
     //Here I get a deep copy of the hero objects, so as to not reuse the reference in every instance
     //Ref: https://scotch.io/bar-talk/copying-objects-in-javascript
-    return JSON.parse(JSON.stringify(heroes[Math.floor(Math.random() * heroes.length)]));
+    return JSON.parse(JSON.stringify(result));
+}
+
+function addHero(name, series, description, rarity) {
+    if(!name || !series || !description || !rarity) {
+        return false; //Do not add if everything is not filled out
+    }
+    heroes.push({
+        name: name,
+        series: series,
+        description: description,
+        rarity: rarity
+    })
+    return true;
 }
 
 function generateRewards(amount) {
@@ -122,4 +178,4 @@ function generateRewards(amount) {
     return rewards;
 }
 
-module.exports = {heroes, generateRewards};
+module.exports = {heroes, generateRewards, addHero};

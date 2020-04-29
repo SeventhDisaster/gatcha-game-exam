@@ -52,13 +52,24 @@ export class Herolist extends React.Component{
         }
     }
 
+    colorRarity = (rarity) => {
+        if(rarity === 3) {
+            return "ssr reward"
+        } else if (rarity === 2){
+            return "sr reward"
+        } else {
+            return "r reward"
+        }
+    }
+
     createHeroList(heroes){
         return(
-            <div>
+            <div className="collection-display">
                 {heroes.map(hero => (
                     <React.Fragment key={hero.name}>
-                        <div className="hero-div">
-                            <h4 className="hero-name">{hero.name} - {this.parseRarity(hero.rarity)}</h4>
+                        <div className={this.colorRarity(hero.rarity)}>
+                            <h4 className="hero-rarity">{this.parseRarity(hero.rarity)}</h4>
+                            <h4 className="hero-name">{hero.name}</h4>
                             <p className="series-name">{hero.series}</p>
                             <p className="hero-desc">{hero.description}</p>
                         </div>
@@ -79,8 +90,15 @@ export class Herolist extends React.Component{
         }
 
         return (
-            <div className="heroes-container">
-                <h1>Hero List Page</h1>
+            <div className="loot-container">
+                <div className="loot-header">
+                    <h1>Hero List</h1>
+                    <p>Every hero in this game has their own set rarity!</p>
+                    <p className="r ra-text">Blue = Rare</p>
+                    <p className="sr ra-text">Purple = Super Rare</p>
+                    <p className="ssr-text ra-text">Golden = Super Super Rare</p>
+                    <p>Higher rarity heroes are worth more time fragments than more common ones!</p>
+                </div>
                 {content}
             </div>
         )

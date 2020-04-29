@@ -43,12 +43,10 @@ class App extends React.Component {
     }
 
     componentWillUnmount() {
-        if(this.socket){
-            if(this.state.user){
-                this.socket.send(JSON.stringify({clearUserId: this.state.user.userId}));
-            }
-            this.socket.close();
+        if(this.state.user){
+            this.socket.send(JSON.stringify({clearUserId: this.state.user.userId}));
         }
+        this.socket.close();
     }
 
     setCurrentUser = (user) => {

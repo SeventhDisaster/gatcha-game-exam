@@ -11,11 +11,11 @@ export class Home extends React.Component{
     getUserSection = (user) => {
         return (
             <React.Fragment>
-                <div>
-                    <h3>Welcome to Hiiro {user.userId}</h3>
-                    <p>You currently have {user.lootboxes} lootboxes to open!</p>
+                <div className="user-section-header">
+                    <h3 className="user-section-welcome">Welcome to Hiiro {user.userId}</h3>
+                    <p className="user-section-lootboxes">You currently have {user.lootboxes} lootboxes to open!</p>
                 </div>
-                <div>
+                <div className="user-section-buttons">
                     <Link className="header-button openloot-btn" to={"/lootbox"}>Lootboxes</Link>
                     <Link className="header-button collection-btn" to="/collection">Your Collection</Link>
                 </div>
