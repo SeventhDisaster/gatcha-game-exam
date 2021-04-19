@@ -10,7 +10,7 @@ Login with username Weeb and Password Anime123
 ### Runs on: `http://localhost:8080`
 This application has NOT been published on any cloud providers.
 
-####The following commands are avaiable to run from CLI:
+#### The following commands are avaiable to run from CLI:
 * `yarn test` - Runs tests with coverage
 * `yarn dev` - Concurrently starts and watches server and watches client files
 * `yarn watch:client` - Runs client for development
@@ -18,7 +18,7 @@ This application has NOT been published on any cloud providers.
 * `yarn build` - Builds project for production (Refreshes content of public folder)
 * `yarn start` - Starts the server with NodeJS
 
-####Start the application
+#### Start the application
 1. unzip project files in a single directory, and navigate into it in CLI
 2. Run command: `yarn install`
     * This sets up node dependencies from package.json
@@ -26,7 +26,7 @@ This application has NOT been published on any cloud providers.
     * NOTE: Make sure port 8080 is not already in use by some other program
     * After starting yarn dev, open a browser and go to `http://localhost:8080` in the URL
 
-##Intro
+## Intro
 I found this exam to be very challenging in a good way. I didn't expect to end up completing as much as I did.
 
 The application I created is a gacha game where the collectibles are protagonists from various Japanese animations series
@@ -48,7 +48,7 @@ These parts have been marked with comments in the relevant areas.
 NOTE: I did not mark code that I wrote myself that just looks similar in structure to some class code. 
 This is a side effect of getting used to writing in a similar way.
 
-###Structure
+### Structure
 Every requirement besides possibly the amount of extra features and 70% test coverage should have been met if I did not
 miss something.
 
@@ -77,8 +77,8 @@ Server endpoints (except Websocket) are found here:
 
 All tests are structured the same way as the client/server files under `/tests`
 
-##Requirements:
-####Application Topic Requirements:
+## Requirements:
+#### Application Topic Requirements:
 
 **T1:** Home page does not display anything, but by logging in with provided account (or signing up with a new account)
 You will be able to visit your own collection area and see predefined data in there. Due to the nature of the application I thought
@@ -112,7 +112,7 @@ This is done with websocket connections. The distribution is handled server-side
 multiple tabs.
 
 
-####Code Requirements:
+#### Code Requirements:
 **R1:** 
 * Home page is created with React
 * 3 other pages can be accessed using React-Router (Herolist, Collection, Lootbox) not counting login/signup
@@ -156,7 +156,7 @@ These tests can be found in security-test.js
 * User collection is sorted by hero name alphabetically
 * Signup has password security features in place (Though only on front-end);
 
-####Testing
+#### Testing
 As of 12:05 AM Thursday 30/4/2020 (Right after midnight 29/4/2020)
 I have achieved a total of 61.59% all file %Stmts coverage as shown in the image below:
 ![Yarn Test Results](https://i.imgur.com/Jxyfh8u.png)
@@ -179,16 +179,16 @@ where it worked fine.
 Server side testing was not a problem, most of server side code has been properly tested and sometimes even executed multiple
  times over.
  
- ##Missing features and potential improvements
- ####Missing Features
+ ## Missing features and potential improvements
+ #### Missing Features
  I think I managed to cover every necessary feature in production. However, I did not manage to create the tests necessary to cover everything.
  
- ####Future Improvement Ideas
+ #### Future Improvement Ideas
  Here are a few things I considered adding to the program that I ended up leaving out due to the time constraints:
  * Make use of the collectibles in more ways: Such as getting in-depth information about them, or playing games with them, similar to real gatcha games
  * Different kinds of lootboxes (some with higher chances of better value heroes)
  
- ###Self evaluation:
+ ### Self evaluation:
  In the end, I think I put in the best effort I could. I was surpised at how fast I managed to create the general functionality of
  the project itself. I am personally pretty bummed that I didn't manage to resolve the issues I had with client side tests in time,
  but this at least taught me to prioritize testing more in future projects.
